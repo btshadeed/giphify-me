@@ -5,82 +5,104 @@
   <meta charset="utf-8">
   <title>Giphify Me Bro!</title>
 </head>
+
 <body>
 
-<div id="buttons"></div>
-<div id="gifs"></div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script type="text/javascript">
+  <div id="buttons"></div>
+  <div id="gifs"></div>
 
 
-var topics = ["lady gaga", "beyoncé", "cardi b", "taylor swift"]
 
-for (var i = 0; i < topics.length; i++) {
+  <form id="user-form">
+    <label for="user-input">Who's your favorite diva?</label>
+    <input type="text" id="user-input"><br>
+   
+    <input id="add-diva" type="submit" value="Add a diva">
+  </form>
 
-$("<button>")
-.text(topics[i])
-.appendTo('#buttons');
-}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
 
-var person = $(this).attr("<button>")
 
-$('#buttons').on("click", function(){
-  var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        person + "&api_key=FbekOe6YpgHamrMonO1Su9ThbblKhuK0&limit=10";
+    var topics = ["lady gaga", "beyoncé", "cardi b", "taylor swift"]
+
+    for (var i = 0; i < topics.length; i++) {
+
+      $("<button class='topic-button'>")
+        .attr("data-topic", topics[i])
+        .text(topics[i])
+        .appendTo('#buttons');
+    }
+
+    var person = $(this).attr("<button>")
+
+    $('#buttons').on("click", ".topic-button", function () {
+      alert("it worked")
+      var topic = $(this).attr("data-topic")
+
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        topic + "&api_key=FbekOe6YpgHamrMonO1Su9ThbblKhuK0&limit=10";
 
       $.ajax({
         url: queryURL,
         method: "GET"
       })
 
-.then(function(response){
+        .then(function (response) {
 
-var results = response.data;
+          var results = response.data;
+          console.log(results)
 
-for (var i = 0; i < results.length; i++){
+          for (var i = 0; i < results.length; i++) {
 
-if (results[i].rating !== "r" && results[i].rating !== "pg-13"){
+            if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
 
-var gifDiv = $("<div class='item'>");
+              var gifDiv = $("<div class='item'>");
 
-var rating = results[i].rating;
+              var rating = results[i].rating;
 
-var p = $("<p>").text("Rating " + rating);
+              var p = $("<p>").text("Rating " + rating);
 
-var personImage = $("<img>");
 
-personImage.attr("src", results[i].images.fixed_height.url);
+              var personImage = $("<img>");
 
-gifDiv.append(p);
-gifDiv.append(personImage);
+              var animateUrl = results[i].images.fixed_height.url;
+              var stillUrl = results[i].images.fixed_height_still.url;
+              personImage.attr('data-animate', animateUrl);
+              
+              personImage.attr("src", stillUrl);
+              
 
-$("#gifs").prepend(gifDiv);
+              gifDiv.append(p);
+              gifDiv.append(personImage);
 
-} 
+              $("#gifs").prepend(gifDiv);
 
-}
-$(".gif").on("click", function() {
-      // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
-      var state = $(this).attr("data-state");
-      // If the clicked image's state is still, update its src attribute to what its data-animate value is.
-      // Then, set the image's data-state to animate
-      // Else set src to the data-still value
-      if (state === "still") {
-        $(this).attr("src", $(this).attr("data-animate"));
-        $(this).attr("data-state", "animate");
-      } else {
-        $(this).attr("src", $(this).attr("data-still"));
-        $(this).attr("data-state", "still");
-      }
+            }
+
+          }
+
+          /*  $(".gif").on("click", function () {
+
+            var state = $(this).attr("data-state");
+
+            if (state === "still") {
+              $(this).attr("src", $(this).attr("data-animate"));
+              $(this).attr("data-state", "animate");
+            } else {
+              $(this).attr("src", $(this).attr("data-still"));
+              $(this).attr("data-state", "still");
+            }
+          }); */
+        });
+
+  
+
     });
-});
-
-});
 
 
 
-</script>
+  </script>
 
 </body>
 
