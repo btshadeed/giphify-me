@@ -40,7 +40,7 @@ form {
     var person = $(this).attr("<button>")
 
     $('#buttons').on("click", ".topic-button", function () {
-      alert("it worked")
+      
       var topic = $(this).attr("data-topic")
 
       var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
@@ -54,7 +54,7 @@ form {
         .then(function (response) {
 
           var results = response.data;
-          console.log(results)
+          
 
           for (var i = 0; i < results.length; i++) {
 
@@ -84,22 +84,8 @@ form {
             }
 
           }
-
-          /*  $(".gif").on("click", function () {
-
-            var state = $(this).attr("data-state");
-
-            if (state === "still") {
-              $(this).attr("src", $(this).attr("data-animate"));
-              $(this).attr("data-state", "animate");
-            } else {
-              $(this).attr("src", $(this).attr("data-still"));
-              $(this).attr("data-state", "still");
-            }
-          }); */
+    
         });
-
-  
 
     });
 
